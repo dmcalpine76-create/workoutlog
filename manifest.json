@@ -1,8 +1,9 @@
 {
-  "name": "Iron Log",
-  "short_name": "Iron Log",
+  "name": "DM Workout Tracker",
+  "short_name": "DM Workout Tracker",
   "description": "Personal gym and calisthenics tracker with progressive overload",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0f0f0f",
   "theme_color": "#f5a623",
