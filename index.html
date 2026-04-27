@@ -167,6 +167,7 @@ body{
   transition:border-color 0.2s,box-shadow 0.2s;
 }
 .ex-card.done{border-color:#2a3a2a;background:#1a221a;}
+.ex-card.partial{border-color:#4a3a10;background:#1e1a0a;}
 .ex-card.open-card{border-color:var(--accent);box-shadow:0 0 0 2px rgba(245,166,35,0.15);}
 
 .ex-header{
@@ -788,13 +789,11 @@ const WORKOUTS = {
     sections:[
       {group:"Chest · Triceps", exercises:[
         {id:"a_bench",   name:"Bench Press",          sets:3, reps:10, weight:30,    unit:"kg",        addKg:2.5,  note:"Controlled down, drive up explosively."},
-        {id:"a_fly",     name:"Chest Fly",             sets:3, reps:12, weight:14,    unit:"kg each",   addKg:1.25, note:"DB each hand. Full stretch at the bottom."},
         {id:"a_tridown", name:"Tricep Pulldown",       sets:3, reps:12, weight:13.6,  unit:"kg",        addKg:1.25, note:"Elbows pinned. Full extension at bottom."},
       ]},
       {group:"Back · Biceps", exercises:[
         {id:"a_dead",    name:"Dead Lift",             sets:3, reps:8,  weight:40,    unit:"kg",        addKg:2.5,  note:"Hinge at hips, brace hard. Biggest compound lift."},
         {id:"a_pullup",  name:"Pull Up (Assisted)",    sets:3, reps:10, weight:27,    unit:"kg assist", addKg:-2.5, note:"Reduce assist when you hit 3×10 clean.", assisted:true},
-        {id:"a_bicurl",  name:"Bicep Curl",            sets:3, reps:12, weight:12.5,  unit:"kg",        addKg:1.25, note:"3-second lower. Both arms."},
       ]},
       {group:"Shoulders", exercises:[
         {id:"a_shpress", name:"Shoulder Press",        sets:3, reps:10, weight:18,    unit:"kg",        addKg:1.25, note:"Seated DB or barbell."},
@@ -804,8 +803,9 @@ const WORKOUTS = {
         {id:"a_legpr",   name:"Leg Press",             sets:3, reps:12, weight:45,    unit:"kg",        addKg:2.5,  note:"Work in calf raises at end of each set."},
         {id:"a_legcrl",  name:"Leg Curl",              sets:3, reps:12, weight:27,    unit:"kg",        addKg:1.25, note:"Each leg."},
       ]},
-      {group:"Cooldown", exercises:[
-        {id:"a_run",     name:"5 Min Run",             sets:1, reps:1,  weight:null,  unit:"",          addKg:0,    note:"Easy pace. Heart rate down."},
+      {group:"Arms", exercises:[
+        {id:"a_bicurl",  name:"Bicep Curl",            sets:3, reps:12, weight:12.5,  unit:"kg",        addKg:1.25, note:"3-second lower. Both arms."},
+        {id:"a_fly",     name:"Chest Fly",             sets:3, reps:12, weight:14,    unit:"kg each",   addKg:1.25, note:"DB each hand. Full stretch at the bottom."},
       ]},
     ]
   },
@@ -815,13 +815,11 @@ const WORKOUTS = {
     sections:[
       {group:"Chest · Triceps", exercises:[
         {id:"b_incpr",   name:"Incline DB Press",      sets:3, reps:10, weight:22,    unit:"kg each",   addKg:1.25, note:"Upper chest. 30–45° incline."},
-        {id:"b_cross",   name:"Cable Crossover",       sets:3, reps:14, weight:12,    unit:"kg",        addKg:1.25, note:"Full squeeze in the centre."},
         {id:"b_ohtri",   name:"Overhead Tricep Ext",   sets:3, reps:12, weight:14,    unit:"kg",        addKg:1.25, note:"Single DB overhead, elbows close."},
       ]},
       {group:"Back · Biceps", exercises:[
         {id:"b_latpull", name:"Lat Pulldown",          sets:3, reps:12, weight:50,    unit:"kg",        addKg:2.5,  note:"Wide grip. Stretch at top, pull to upper chest."},
         {id:"b_dbrow",   name:"DB Row",                sets:3, reps:10, weight:20,    unit:"kg",        addKg:2.5,  note:"Each arm. Drive elbow to ceiling."},
-        {id:"b_hamcrl",  name:"Hammer Curl",           sets:3, reps:12, weight:12,    unit:"kg",        addKg:1.25, note:"Palms facing in — hits brachialis for arm thickness."},
       ]},
       {group:"Shoulders", exercises:[
         {id:"b_shrug",   name:"Shoulder Shrugs",       sets:3, reps:15, weight:17.5,  unit:"kg",        addKg:1.25, note:"Hold 1 second at top."},
@@ -831,8 +829,9 @@ const WORKOUTS = {
         {id:"b_rdl",     name:"Romanian Deadlift",     sets:3, reps:10, weight:35,    unit:"kg",        addKg:2.5,  note:"Hamstring focus. Soft knee, feel the stretch."},
         {id:"b_legext",  name:"Leg Extension",         sets:3, reps:14, weight:35,    unit:"kg",        addKg:2.5,  note:"Hard squeeze at top."},
       ]},
-      {group:"Cooldown", exercises:[
-        {id:"b_run",     name:"5 Min Run",             sets:1, reps:1,  weight:null,  unit:"",          addKg:0,    note:"Easy pace."},
+      {group:"Arms", exercises:[
+        {id:"b_hamcrl",  name:"Hammer Curl",           sets:3, reps:12, weight:12,    unit:"kg",        addKg:1.25, note:"Palms facing in — hits brachialis for arm thickness."},
+        {id:"b_cross",   name:"Cable Crossover",       sets:3, reps:14, weight:12,    unit:"kg",        addKg:1.25, note:"Full squeeze in the centre."},
       ]},
     ]
   },
@@ -842,13 +841,11 @@ const WORKOUTS = {
     sections:[
       {group:"Chest · Triceps", exercises:[
         {id:"c_bench",   name:"Bench Press (Heavy)",   sets:4, reps:7,  weight:32,    unit:"kg",        addKg:2.5,  note:"4×7 strength protocol. Rest 2 full minutes."},
-        {id:"c_dips",    name:"Dips (Bodyweight)",     sets:3, reps:10, weight:null,  unit:"",          addKg:0,    note:"Lean forward for chest focus."},
         {id:"c_tridn",   name:"Tricep Pulldown",       sets:3, reps:10, weight:15,    unit:"kg",        addKg:1.25, note:"Heavier than usual today."},
       ]},
       {group:"Back · Biceps", exercises:[
         {id:"c_dead",    name:"Dead Lift (Heavy)",     sets:4, reps:6,  weight:45,    unit:"kg",        addKg:2.5,  note:"4 heavy sets. Brace, hinge, drive."},
         {id:"c_pullup",  name:"Pull Up (Assisted)",    sets:4, reps:8,  weight:25,    unit:"kg assist", addKg:-2.5, note:"4 sets strength focus.", assisted:true},
-        {id:"c_bichv",   name:"Bicep Curl (Heavy)",    sets:3, reps:8,  weight:14,    unit:"kg",        addKg:1.25, note:"Go heavier, fewer reps."},
       ]},
       {group:"Shoulders", exercises:[
         {id:"c_shphv",   name:"Shoulder Press (Heavy)",sets:4, reps:7,  weight:20,    unit:"kg",        addKg:1.25, note:"Heavy compound shoulder work."},
@@ -858,9 +855,9 @@ const WORKOUTS = {
         {id:"c_lunge",   name:"Walking Lunges",        sets:3, reps:12, weight:10,    unit:"kg each",   addKg:1.25, note:"DB each hand. 12 steps per leg."},
         {id:"c_legpr",   name:"Leg Press (Heavy)",     sets:4, reps:8,  weight:55,    unit:"kg",        addKg:2.5,  note:"Heavier today. Work in calf raises."},
       ]},
-      {group:"Wrists · Cooldown", exercises:[
-        {id:"c_wrist",   name:"Wrist Rolls",           sets:3, reps:10, weight:null,  unit:"",          addKg:0,    note:"Both sides."},
-        {id:"c_run",     name:"5 Min Run",             sets:1, reps:1,  weight:null,  unit:"",          addKg:0,    note:"Cool down."},
+      {group:"Arms", exercises:[
+        {id:"c_bichv",   name:"Bicep Curl (Heavy)",    sets:3, reps:8,  weight:14,    unit:"kg",        addKg:1.25, note:"Go heavier, fewer reps."},
+        {id:"c_wrist",   name:"Wrist Rolls",           sets:3, reps:10, weight:null,  unit:"",          addKg:0,    note:"Both sides — forearm endurance."},
       ]},
     ]
   }
@@ -1080,20 +1077,39 @@ function getOLRecommendation(ex){
 // ═══════════════════════════════════════════════════════
 // TODAY
 // ═══════════════════════════════════════════════════════
-function isExDone(id){ return S.currentSets[id]?.every(s=>s.done)??false; }
+function isExDone(id){
+  // Done = all sets ticked OR at least one set ticked (partial OK) OR skipped
+  const sets=S.currentSets[id];
+  if(!sets) return false;
+  return sets.every(s=>s.done); // fully done check (for green card border)
+}
+function isExStarted(id){
+  // Started = at least one set ticked, or skipped
+  const sets=S.currentSets[id];
+  if(!sets) return false;
+  return sets.some(s=>s.done||s.skipped);
+}
+function isExFinishable(id){
+  // Finishable = at least one set ticked, all sets ticked, or fully skipped
+  const sets=S.currentSets[id];
+  if(!sets) return false;
+  return sets.some(s=>s.done) || sets.every(s=>s.skipped);
+}
 function doneCount(){ return allEx().filter(e=>isExDone(e.id)).length; }
-function allDone(){ return allEx().every(e=>isExDone(e.id)); }
+function startedCount(){ return allEx().filter(e=>isExStarted(e.id)).length; }
+function allFinishable(){ return allEx().every(e=>isExFinishable(e.id)); }
 function fmtDate(d){ return new Date(d).toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'2-digit'}); }
 
 function renderToday(){
   const key=wkKey(), workout=wk(), exs=allEx();
-  const done=doneCount(), total=exs.length, pct=Math.round(done/total*100);
+  const done=doneCount(), started=startedCount(), total=exs.length;
+  const pct=Math.round(started/total*100);
   document.getElementById('headerBadge').textContent=`Session ${S.sessionCount+1} · ${key}`;
 
   let html=`
-    <div class="done-banner ${allDone()?'show':''}" id="doneBanner">
-      <h2>All sets logged ✓</h2>
-      <p>Tap Finish Session to save and move to Workout ${CYCLE[(S.workoutIdx+1)%3]}</p>
+    <div class="done-banner ${allFinishable()?'show':''}" id="doneBanner">
+      <h2>Ready to finish 💪</h2>
+      <p>${done===total?'All sets complete!':'Partial sets saved — tap Finish to log what you did.'} Next up: Workout ${CYCLE[(S.workoutIdx+1)%3]}</p>
     </div>
     <div class="wk-header">
       <div class="wk-label label-${key}">${workout.label}</div>
@@ -1101,7 +1117,7 @@ function renderToday(){
       <div class="tip-box">${workout.tip}</div>
     </div>
     <div class="prog-wrap">
-      <div class="prog-meta"><span>Progress</span><span>${done} of ${total} exercises</span></div>
+      <div class="prog-meta"><span>Progress</span><span>${started} of ${total} exercises started</span></div>
       <div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div>
     </div>`;
 
@@ -1109,12 +1125,14 @@ function renderToday(){
     html+=`<div class="group-lbl">${sec.group}</div>`;
     sec.exercises.forEach(ex=>{ html+=buildExCard(ex); });
   });
-  html+=`<button class="finish-btn" ${allDone()?'':'disabled'} onclick="finishSession()">Finish Session ✓</button>`;
+  html+=`<button class="finish-btn" ${allFinishable()?'':'disabled'} onclick="finishSession()">Finish Session ✓</button>`;
   document.getElementById('page-today').innerHTML=html;
 }
 
 function buildExCard(ex){
-  const done=isExDone(ex.id), isOpen=S.openExId===ex.id;
+  const allSetsDone=isExDone(ex.id);
+  const anySetDone=isExStarted(ex.id);
+  const isOpen=S.openExId===ex.id;
   const sets=S.currentSets[ex.id]||[];
   const ol=getOLRecommendation(ex);
   const unit=getUnitPref(ex.id);  // 'kg' or 'lbs'
@@ -1210,9 +1228,9 @@ function buildExCard(ex){
       ${rows}</table>`;
   }
 
-  return `<div class="ex-card ${done?'done':''} ${isOpen?'open-card':''}" id="exc-${ex.id}">
+  return `<div class="ex-card ${allSetsDone?'done':anySetDone?'partial':''} ${isOpen?'open-card':''}" id="exc-${ex.id}">
     <div class="ex-header" onclick="toggleEx('${ex.id}')">
-      <div class="ex-check">${done?'✓':''}</div>
+      <div class="ex-check" style="${anySetDone&&!allSetsDone?'background:var(--warn);border-color:var(--warn);color:#000;':''}">${allSetsDone?'✓':anySetDone?'~':''}</div>
       <div class="ex-main">
         <div class="ex-name">${ex.name}</div>
         <div class="ex-desc">${ex.sets} × ${ex.reps} reps · ${ex.note}</div>
@@ -1226,7 +1244,12 @@ function buildExCard(ex){
       ${prevNote?`<div class="prev-note">📊 ${prevNote}</div>`:''}
       <div class="pr-flash ${isPR?'show':''}">🏅 New personal record!</div>
       ${olBox}${tableHtml}
-      <button class="skip-btn" onclick="skipEx('${ex.id}')">skip this exercise</button>
+      ${anySetDone&&!allSetsDone
+        ?`<button class="skip-btn" style="color:var(--warn);text-decoration:none;border:1px solid var(--warn);border-radius:6px;padding:8px;margin-top:6px;" onclick="savePartialEx('${ex.id}')">
+            Save partial (${sets.filter(s=>s.done).length}/${sets.length} sets done) &amp; close
+          </button>`
+        :''}
+      <button class="skip-btn" onclick="skipEx('${ex.id}')">skip this exercise entirely</button>
     </div>
   </div>`;
 }
@@ -1252,7 +1275,7 @@ function updSetDisplay(exId,idx,val){
 function logSet(exId,idx){
   if(!S.currentSets[exId]) return;
   const set=S.currentSets[exId][idx];
-  if(set.done){ set.done=false; persist(); refreshCard(exId); updateProg(); const fb=document.querySelector('.finish-btn'); if(fb) fb.disabled=!allDone(); return; }
+  if(set.done){ set.done=false; persist(); refreshCard(exId); updateProg(); const fb=document.querySelector('.finish-btn'); if(fb) fb.disabled=!allFinishable(); return; }
   const wEl=document.getElementById(`w_${exId}_${idx}`);
   const rEl=document.getElementById(`r_${exId}_${idx}`);
   const wv=wEl?parseFloat(wEl.value):null;
@@ -1264,11 +1287,17 @@ function logSet(exId,idx){
   const next=S.currentSets[exId][idx+1];
   if(next&&!next.done&&next.w===null) next.w=set.w;
   persist(); refreshCard(exId); updateProg();
-  if(allDone()){const b=document.getElementById('doneBanner');if(b)b.classList.add('show');}
-  const fb=document.querySelector('.finish-btn'); if(fb) fb.disabled=!allDone();
+  if(allFinishable()){const b=document.getElementById('doneBanner');if(b)b.classList.add('show');}
+  const fb=document.querySelector('.finish-btn'); if(fb) fb.disabled=!allFinishable();
+}
+function savePartialEx(exId){
+  // Mark remaining undone sets as skipped so exercise is finishable
+  S.currentSets[exId].forEach(s=>{ if(!s.done) s.skipped=true; });
+  S.openExId=null;
+  persist(); renderToday();
 }
 function skipEx(exId){
-  S.currentSets[exId].forEach(s=>{s.done=true;s.skipped=true;});
+  S.currentSets[exId].forEach(s=>{s.done=false;s.skipped=true;});
   S.openExId=null; persist(); renderToday();
 }
 function refreshCard(exId){
@@ -1279,11 +1308,11 @@ function refreshCard(exId){
   el.replaceWith(tmp.firstElementChild);
 }
 function updateProg(){
-  const done=doneCount(), total=allEx().length;
+  const started=startedCount(), total=allEx().length;
   const fill=document.querySelector('.prog-fill');
   const meta=document.querySelectorAll('.prog-meta span');
-  if(fill) fill.style.width=Math.round(done/total*100)+'%';
-  if(meta[1]) meta[1].textContent=`${done} of ${total} exercises`;
+  if(fill) fill.style.width=Math.round(started/total*100)+'%';
+  if(meta[1]) meta[1].textContent=`${started} of ${total} exercises started`;
 }
 function finishSession(){
   const key=wkKey();
@@ -1773,7 +1802,7 @@ function exportExcel(){
   styleHeaderRow(wsCali, caliRows[0].length);
   XLSX.utils.book_append_sheet(wb, wsCali, 'Calisthenics Log');
 
-  const fname=`IronLog_${new Date().toISOString().slice(0,10)}.xlsx`;
+  const fname=`DMTracker_${new Date().toISOString().slice(0,10)}.xlsx`;
   XLSX.writeFile(wb, fname);
   showToast('Excel file downloaded ✓');
 }
@@ -1794,7 +1823,7 @@ function styleHeaderRow(ws, cols){
 // ── BACKUP / RESTORE ──────────────────────────────────
 async function saveBackup(){
   const data=JSON.stringify({gym:S, cali:{...CS,currentDone:[...CS.currentDone]}}, null, 2);
-  const fileName=`IronLog_backup_${new Date().toISOString().slice(0,10)}.json`;
+  const fileName=`DMTracker_backup_${new Date().toISOString().slice(0,10)}.json`;
   const blob=new Blob([data],{type:'application/json'});
   const file=new File([blob], fileName, {type:'application/json'});
 
