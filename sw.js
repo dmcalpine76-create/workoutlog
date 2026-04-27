@@ -2,7 +2,7 @@
 // Uses relative paths so it works correctly on GitHub Pages subdirectories
 // Update CACHE_VERSION when deploying a new version
 
-const CACHE_VERSION = 'ironlog-v5';
+const CACHE_VERSION = 'ironlog-v6';
 const CACHE_NAME = `ironlog-cache-${CACHE_VERSION}`;
 
 const APP_SHELL = [

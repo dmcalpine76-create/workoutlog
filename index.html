@@ -1170,7 +1170,7 @@ function buildExCard(ex){
   }
 
   let isPR=false;
-  if(done&&ex.weight!==null){
+  if(allSetsDone&&ex.weight!==null){
     const thisMax=Math.max(...sets.map(s=>s.w||0));
     const allPrev=(S.exLog[ex.id]||[]).flatMap(l=>l.sets.map(s=>s.w||0));
     if(!allPrev.length||thisMax>Math.max(...allPrev)) isPR=true;
