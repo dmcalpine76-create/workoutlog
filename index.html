@@ -1028,7 +1028,15 @@ function initSets(){
     S.currentSets[ex.id]=rows;
   });
 }
-if(!S.currentSets||Object.keys(S.currentSets).length===0) initSets();
+// Check if currentSets is empty OR contains stale exercise IDs not in current workout
+function currentSetsAreStale(){
+  if(!S.currentSets||Object.keys(S.currentSets).length===0) return true;
+  const currentIds=allEx().map(e=>e.id);
+  const storedIds=Object.keys(S.currentSets);
+  // Stale if any current exercise is missing from stored sets
+  return currentIds.some(id=>!storedIds.includes(id));
+}
+if(currentSetsAreStale()) initSets();
 
 // ═══════════════════════════════════════════════════════
 // PROGRESSIVE OVERLOAD ENGINE
@@ -1868,16 +1876,29 @@ function doRestore(input){
       const gymSess=gymData.sessions.length;
       const caliSess=caliData?.sessions?.length||0;
       if(!confirm(`Restore ${gymSess} gym sessions${caliSess?` and ${caliSess} cali sessions`:''} from ${file.name}?\n\nThis will replace all current data.`)) return;
+
+      // Restore gym state, ensuring required fields exist
       S=gymData;
+      if(!S.unitPrefs) S.unitPrefs={};
+      if(!S.bodyWeights||!Array.isArray(S.bodyWeights)) S.bodyWeights=[];
+
+      // Always reinitialise currentSets after restore — old backup may have
+      // stale exercise IDs from a previous workout structure
+      S.currentSets={};
+      S.openExId=null;
+      initSets();
+
       if(caliData){
         CS={...caliData, currentDone:new Set(caliData.currentDone||[])};
+        if(!CS.actualReps) CS.actualReps={};
         caliPersist();
       }
       persist();
       showToast(`Restored ${S.sessions.length} sessions ✓`);
       renderToday();
     } catch(err){
-      alert('Could not read backup file. Make sure it is a valid DM Workout Tracker backup (.json).');
+      console.error('Restore error:', err);
+      alert('Could not read backup file. Make sure it is a valid DM Workout Tracker backup (.json).\n\nError: ' + err.message);
     }
   };
   reader.readAsText(file);
