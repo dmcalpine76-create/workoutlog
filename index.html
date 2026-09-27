@@ -749,6 +749,75 @@ body{
   font-family:'Space Mono',monospace;
   margin-top:3px;
 }
+
+/* ── EXERCISE EDITOR (swap what's in a slot) ── */
+.plan-ex-row{position:relative;}
+.exedit-btn{
+  background:none;border:1px solid var(--border2);
+  color:var(--muted);border-radius:6px;
+  width:30px;height:30px;flex-shrink:0;
+  font-size:14px;cursor:pointer;margin-left:8px;
+  transition:all 0.15s;
+  display:flex;align-items:center;justify-content:center;
+}
+.exedit-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent3);}
+.exedit-panel{
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:8px;padding:13px;margin:8px 0 12px;
+}
+.exedit-badge{
+  font-size:11px;color:var(--muted);
+  margin-bottom:10px;line-height:1.4;
+}
+.exedit-field{margin-bottom:10px;}
+.exedit-field:last-of-type{margin-bottom:0;}
+.exedit-label{
+  font-size:12px;color:var(--muted);
+  margin-bottom:4px;display:block;
+}
+.exedit-input,.exedit-textinput{
+  width:100%;background:var(--bg2);
+  border:1px solid var(--border2);border-radius:6px;
+  padding:9px 10px;color:var(--text);font-size:15px;
+  font-family:'DM Sans',sans-serif;
+  -moz-appearance:textfield;
+}
+.exedit-input{font-family:'Space Mono',monospace;}
+.exedit-input::-webkit-outer-spin-button,.exedit-input::-webkit-inner-spin-button{-webkit-appearance:none;}
+.exedit-input:focus,.exedit-textinput:focus{outline:none;border-color:var(--accent);}
+.exedit-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.exedit-check{
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;color:var(--text2);margin-bottom:10px;
+  cursor:pointer;
+}
+.exedit-check input{width:17px;height:17px;accent-color:var(--accent);}
+.exedit-weight-fields{transition:opacity 0.15s;}
+.exedit-weight-fields.disabled{opacity:0.35;pointer-events:none;}
+.exedit-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.exedit-save-btn{
+  background:var(--accent);color:#000;border:none;
+  border-radius:6px;padding:9px 16px;font-size:13px;font-weight:600;
+  font-family:'DM Sans',sans-serif;cursor:pointer;
+}
+.exedit-cancel-btn{
+  background:none;color:var(--muted);
+  border:1px solid var(--border2);border-radius:6px;
+  padding:9px 14px;font-size:13px;font-weight:500;
+  font-family:'DM Sans',sans-serif;cursor:pointer;
+}
+.exedit-revert-btn{
+  background:none;color:var(--stall);
+  border:1px solid var(--stall);border-radius:6px;
+  padding:9px 14px;font-size:12px;font-weight:500;
+  font-family:'DM Sans',sans-serif;cursor:pointer;
+}
+.exedit-customised-tag{
+  font-size:10px;color:var(--accent);
+  background:var(--accent3);border:1px solid #4a3010;
+  border-radius:8px;padding:1px 7px;margin-left:6px;
+  font-family:'DM Sans',sans-serif;font-weight:600;
+}
 </style>
 </head>
 <body>
@@ -961,7 +1030,9 @@ let S = JSON.parse(localStorage.getItem(STORE_KEY)||'null') || {
   sessions:[], exLog:{}, bodyWeights:[],
   currentSets:{}, openExId:null,
   unitPrefs:{},   // {exId: 'kg'|'lbs'} — per-exercise unit preference
+  exerciseEdits:{}, // {exId: {name,sets,reps,weight,unit,addKg,note,assisted}} — user overrides of the default exercise in a slot
 };
+if(!S.exerciseEdits) S.exerciseEdits={};
 function persist(){
   localStorage.setItem(STORE_KEY, JSON.stringify(S));
   // Auto-backup every 5 saves
@@ -1001,8 +1072,34 @@ function toggleUnit(exId){
   refreshCard(exId);
 }
 
+// ── EXERCISE EDITING (swap what's in a slot) ──────────
+// wk()/allEx() are the single choke point every part of the app reads
+// exercises through, so merging overrides here means Today, Plan,
+// Progress, History and the Excel export all pick it up automatically.
+function wk(k){
+  const key=k||wkKey();
+  const base=WORKOUTS[key];
+  const edits=S.exerciseEdits||{};
+  if(Object.keys(edits).length===0) return base; // fast path — no edits, return as-is
+  return {
+    ...base,
+    sections: base.sections.map(sec=>({
+      ...sec,
+      exercises: sec.exercises.map(ex=> edits[ex.id] ? {...ex, ...edits[ex.id]} : ex)
+    }))
+  };
+}
+// The TRUE original default for an id, ignoring any override — used by
+// "revert to default" and to prefill the edit form the first time.
+function getBaseEx(exId){
+  for(const k of CYCLE){
+    const found=WORKOUTS[k].sections.flatMap(s=>s.exercises).find(e=>e.id===exId);
+    if(found) return found;
+  }
+  return null;
+}
+
 function wkKey(){ return CYCLE[S.workoutIdx%3]; }
-function wk(k){ return WORKOUTS[k||wkKey()]; }
 function allEx(k){
   const out=[];
   wk(k).sections.forEach(s=>s.exercises.forEach(e=>out.push(e)));
@@ -1405,7 +1502,10 @@ function renderPlan(){
     </div></div></div>`;
   });
 
-  html+=`<div class="sec-title" style="margin-top:18px">Workout Details</div>`;
+  html+=`<div class="sec-title" style="margin-top:18px">Workout Details</div>
+  <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:11px 13px;margin-bottom:10px;font-size:12px;color:var(--text2);line-height:1.5;">
+    Tap the ✏️ next to any exercise to swap it for something else, or change its sets, reps, note or increment. Your logged history stays attached to that slot, so switching to a close variant keeps its progression tracking continuous.
+  </div>`;
   CYCLE.forEach((key,i)=>{
     const w=wk(key), isNext=key===nextKey;
     html+=`<div class="plan-card" style="${isNext?'border-color:var(--accent);':''}">
@@ -1420,22 +1520,177 @@ function renderPlan(){
     w.sections.forEach(sec=>{
       html+=`<div class="plan-sec"><div class="plan-sec-lbl">${sec.group}</div>`;
       sec.exercises.forEach(ex=>{
-        html+=`<div class="plan-ex-row">
-          <div>
-            <div style="font-size:13px;font-weight:500">${ex.name}</div>
-            <div class="plan-ex-detail">${ex.note}</div>
-          </div>
-          <div style="text-align:right;flex-shrink:0;margin-left:10px">
-            <div class="plan-ex-w">${ex.weight??'BW'}</div>
-            <div style="font-size:11px;color:var(--muted)">${ex.sets}×${ex.reps} ${ex.unit}</div>
-          </div>
-        </div>`;
+        html+=buildPlanExRow(key, ex);
       });
       html+=`</div>`;
     });
     html+=`</div></div>`;
   });
   document.getElementById('page-plan').innerHTML=html;
+}
+
+// One row per exercise slot in the Workout Details section — either the
+// normal read-only display, or (when this slot is being edited) an inline
+// form to change name/sets/reps/weight-tracking/increment/note.
+let editingExId=null;
+function buildPlanExRow(key, ex){
+  const isEditing=editingExId===ex.id;
+  const hasOverride=!!(S.exerciseEdits && S.exerciseEdits[ex.id]);
+
+  if(!isEditing){
+    return `<div class="plan-ex-row">
+      <div style="flex:1;min-width:0;display:flex;align-items:center;">
+        <div>
+          <div style="font-size:13px;font-weight:500">${ex.name}${hasOverride?'<span class="exedit-customised-tag">edited</span>':''}</div>
+          <div class="plan-ex-detail">${ex.note}</div>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;margin-left:10px">
+        <div class="plan-ex-w">${ex.weight??'BW'}</div>
+        <div style="font-size:11px;color:var(--muted)">${ex.sets}×${ex.reps} ${ex.unit}</div>
+      </div>
+      <button class="exedit-btn" onclick="toggleExEdit('${ex.id}')" title="Edit this exercise">✏️</button>
+    </div>`;
+  }
+
+  // Edit form — prefill from the current effective values (base + any override)
+  const isBW=ex.weight===null;
+  const dispW=isBW?'':toDisplay(ex.weight,ex.id);
+  const unit=getUnitPref(ex.id);
+  return `<div class="exedit-panel">
+    <div class="exedit-badge">Editing this slot in Workout ${key}. History logged here stays attached — it doesn't reset.</div>
+    <div class="exedit-field">
+      <label class="exedit-label">Exercise name</label>
+      <input class="exedit-textinput" type="text" id="ee_name_${ex.id}" value="${ex.name.replace(/"/g,'&quot;')}">
+    </div>
+    <div class="exedit-row2">
+      <div class="exedit-field">
+        <label class="exedit-label">Sets</label>
+        <input class="exedit-input" type="number" min="1" step="1" id="ee_sets_${ex.id}" value="${ex.sets}">
+      </div>
+      <div class="exedit-field">
+        <label class="exedit-label">Target reps</label>
+        <input class="exedit-input" type="number" min="1" step="1" id="ee_reps_${ex.id}" value="${ex.reps}">
+      </div>
+    </div>
+    <label class="exedit-check">
+      <input type="checkbox" id="ee_bw_${ex.id}" ${isBW?'checked':''} onchange="toggleExEditBW('${ex.id}')">
+      No weight tracked (bodyweight / time-based exercise)
+    </label>
+    <div class="exedit-weight-fields ${isBW?'disabled':''}" id="ee_wfields_${ex.id}">
+      <div class="exedit-row2">
+        <div class="exedit-field">
+          <label class="exedit-label">Starting weight (${unit})</label>
+          <input class="exedit-input" type="number" step="0.5" id="ee_weight_${ex.id}" value="${dispW}">
+        </div>
+        <div class="exedit-field">
+          <label class="exedit-label">Increment per progression</label>
+          <input class="exedit-input" type="number" step="0.25" id="ee_addkg_${ex.id}" value="${ex.addKg??1.25}">
+        </div>
+      </div>
+      <div class="exedit-field">
+        <label class="exedit-label">Weight unit label (e.g. kg, kg each, kg assist)</label>
+        <input class="exedit-textinput" type="text" id="ee_unit_${ex.id}" value="${(ex.unit||'kg').replace(/"/g,'&quot;')}">
+      </div>
+      <label class="exedit-check">
+        <input type="checkbox" id="ee_assisted_${ex.id}" ${ex.assisted?'checked':''}>
+        Assisted exercise (weight decreases as you improve — use a negative increment)
+      </label>
+    </div>
+    <div class="exedit-field">
+      <label class="exedit-label">Form cue / note</label>
+      <input class="exedit-textinput" type="text" id="ee_note_${ex.id}" value="${(ex.note||'').replace(/"/g,'&quot;')}">
+    </div>
+    <div class="exedit-actions">
+      <button class="exedit-save-btn" onclick="saveExerciseEdit('${key}','${ex.id}')">Save</button>
+      <button class="exedit-cancel-btn" onclick="cancelExEdit()">Cancel</button>
+      ${hasOverride?`<button class="exedit-revert-btn" onclick="resetExerciseEdit('${ex.id}')">Revert to default</button>`:''}
+    </div>
+  </div>`;
+}
+
+function toggleExEdit(exId){
+  editingExId = editingExId===exId ? null : exId;
+  renderPlan();
+  if(editingExId){
+    setTimeout(()=>{
+      document.getElementById('ee_name_'+exId)?.scrollIntoView({behavior:'smooth',block:'center'});
+    },60);
+  }
+}
+function cancelExEdit(){ editingExId=null; renderPlan(); }
+
+function toggleExEditBW(exId){
+  const wrap=document.getElementById('ee_wfields_'+exId);
+  const checked=document.getElementById('ee_bw_'+exId)?.checked;
+  if(wrap) wrap.classList.toggle('disabled', checked);
+}
+
+function saveExerciseEdit(key, exId){
+  const nameEl=document.getElementById('ee_name_'+exId);
+  const setsEl=document.getElementById('ee_sets_'+exId);
+  const repsEl=document.getElementById('ee_reps_'+exId);
+  const bwEl=document.getElementById('ee_bw_'+exId);
+  const weightEl=document.getElementById('ee_weight_'+exId);
+  const addkgEl=document.getElementById('ee_addkg_'+exId);
+  const unitEl=document.getElementById('ee_unit_'+exId);
+  const assistedEl=document.getElementById('ee_assisted_'+exId);
+  const noteEl=document.getElementById('ee_note_'+exId);
+  if(!nameEl) return;
+
+  const name=nameEl.value.trim() || getBaseEx(exId)?.name || 'Exercise';
+  const sets=Math.max(1, parseInt(setsEl.value)||3);
+  const reps=Math.max(1, parseInt(repsEl.value)||10);
+  const isBW=!!bwEl?.checked;
+  const note=noteEl.value.trim();
+
+  let weightKg=null, unit='', addKg=0, assisted=false;
+  if(!isBW){
+    const wDisp=parseFloat(weightEl.value);
+    weightKg = isNaN(wDisp) ? (getBaseEx(exId)?.weight??10) : toKg(wDisp,exId);
+    addKg = isNaN(parseFloat(addkgEl.value)) ? 1.25 : parseFloat(addkgEl.value);
+    unit = unitEl.value.trim() || 'kg';
+    assisted = !!assistedEl?.checked;
+  }
+
+  S.exerciseEdits[exId] = {name, sets, reps, weight:weightKg, unit, addKg, note, assisted};
+
+  // Keep the next session's pre-filled numbers in step with the edit,
+  // and resize the set rows if the set count changed.
+  const curRows=S.currentSets[exId]||[];
+  const rows=[...curRows];
+  if(rows.length<sets){
+    for(let i=rows.length;i<sets;i++) rows.push({w:weightKg, r:reps, done:false, skipped:false});
+  } else if(rows.length>sets){
+    rows.length=sets;
+  }
+  rows.forEach(r=>{ if(!r.done) r.w=weightKg; });
+  S.currentSets[exId]=rows;
+
+  persist();
+  editingExId=null;
+  showToast('Exercise updated ✓');
+  renderPlan();
+}
+
+function resetExerciseEdit(exId){
+  if(!confirm('Revert this slot back to its original default exercise?\n\nYour logged history for it is not affected.')) return;
+  delete S.exerciseEdits[exId];
+  const base=getBaseEx(exId);
+  if(base && S.currentSets[exId]){
+    const rows=[...S.currentSets[exId]];
+    if(rows.length<base.sets){
+      for(let i=rows.length;i<base.sets;i++) rows.push({w:base.weight, r:base.reps, done:false, skipped:false});
+    } else if(rows.length>base.sets){
+      rows.length=base.sets;
+    }
+    rows.forEach(r=>{ if(!r.done) r.w=base.weight; });
+    S.currentSets[exId]=rows;
+  }
+  persist();
+  editingExId=null;
+  showToast('Reverted to default ✓');
+  renderPlan();
 }
 
 function tglPlan(bid,aid){
@@ -1881,6 +2136,7 @@ function doRestore(input){
       S=gymData;
       if(!S.unitPrefs) S.unitPrefs={};
       if(!S.bodyWeights||!Array.isArray(S.bodyWeights)) S.bodyWeights=[];
+      if(!S.exerciseEdits) S.exerciseEdits={};
 
       // Always reinitialise currentSets after restore — old backup may have
       // stale exercise IDs from a previous workout structure
