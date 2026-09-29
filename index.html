@@ -853,85 +853,44 @@ body{
 // ═══════════════════════════════════════════════════════
 const WORKOUTS = {
   A:{
-    label:"Full Body A", color:"A",
-    tip:"Lead with the big compounds while you're fresh. Bench and deadlift drive the most overall mass.",
+    label:"Workout A", color:"A",
+    tip:"Chest, triceps and back day with a couple of leg movements mixed in. Controlled tempo on presses, full lockout on every tricep set.",
     sections:[
-      {group:"Chest · Triceps", exercises:[
-        {id:"a_bench",   name:"Bench Press",          sets:3, reps:10, weight:30,    unit:"kg",        addKg:2.5,  note:"Controlled down, drive up explosively."},
-        {id:"a_tridown", name:"Tricep Pulldown",       sets:3, reps:12, weight:13.6,  unit:"kg",        addKg:1.25, note:"Elbows pinned. Full extension at bottom."},
-      ]},
-      {group:"Back · Biceps", exercises:[
-        {id:"a_dead",    name:"Dead Lift",             sets:3, reps:8,  weight:40,    unit:"kg",        addKg:2.5,  note:"Hinge at hips, brace hard. Biggest compound lift."},
-        {id:"a_pullup",  name:"Pull Up (Assisted)",    sets:3, reps:10, weight:27,    unit:"kg assist", addKg:-2.5, note:"Reduce assist when you hit 3×10 clean.", assisted:true},
-      ]},
-      {group:"Shoulders", exercises:[
-        {id:"a_shpress", name:"Shoulder Press",        sets:3, reps:10, weight:18,    unit:"kg",        addKg:1.25, note:"Seated DB or barbell."},
-        {id:"a_rdelt",   name:"Rear Delt Fly",         sets:3, reps:15, weight:7,     unit:"kg each",   addKg:1.25, note:"Bent-over DB. Squeeze at the top."},
-      ]},
-      {group:"Legs", exercises:[
-        {id:"a_legpr",   name:"Leg Press",             sets:3, reps:12, weight:45,    unit:"kg",        addKg:2.5,  note:"Work in calf raises at end of each set."},
-        {id:"a_legcrl",  name:"Leg Curl",              sets:3, reps:12, weight:27,    unit:"kg",        addKg:1.25, note:"Each leg."},
-      ]},
-      {group:"Arms", exercises:[
-        {id:"a_bicurl",  name:"Bicep Curl",            sets:3, reps:12, weight:12.5,  unit:"kg",        addKg:1.25, note:"3-second lower. Both arms."},
-        {id:"a_fly",     name:"Chest Fly",             sets:3, reps:12, weight:14,    unit:"kg each",   addKg:1.25, note:"DB each hand. Full stretch at the bottom."},
+      {group:"Exercises", exercises:[
+        {id:"a_benchincline", name:"Bench Press Incline",        sets:3, reps:8, weight:20,   unit:"kg", addKg:2.5,  note:"30–45° incline. Controlled down, drive up."},
+        {id:"a_benchflat",    name:"Bench Press Flat",           sets:3, reps:8, weight:20,   unit:"kg", addKg:2.5,  note:"Controlled down, drive up explosively."},
+        {id:"a_tricoh",       name:"Tricep Overhead Extension",  sets:3, reps:8, weight:9.1,  unit:"kg", addKg:1.25, note:"Elbows close, full stretch behind the head."},
+        {id:"a_tricablecurl", name:"Tricep Extension – Cable Curl Bar", sets:3, reps:8, weight:4.5, unit:"kg", addKg:1.25, note:"Elbows pinned to sides, full extension at bottom."},
+        {id:"a_tricsidepull", name:"Tricep Extension – Cable Side Pull", sets:3, reps:8, weight:0, unit:"kg", addKg:1.25, note:"Single-arm, pull across body, squeeze at full extension."},
+        {id:"a_dbcurl",       name:"Seated Incline Dumbbell Curls", sets:3, reps:8, weight:9, unit:"kg each", addKg:1.25, note:"Full stretch at bottom, don't swing."},
+        {id:"a_legext",       name:"Leg Extension",              sets:3, reps:8, weight:50,  unit:"kg", addKg:2.5,  note:"Hard squeeze at the top."},
+        {id:"a_legcurl",      name:"Leg Curl",                   sets:3, reps:8, weight:32,  unit:"kg", addKg:1.25, note:"Each leg — controlled through full range."},
+        {id:"a_fly",          name:"Chest Fly",                  sets:3, reps:8, weight:45,  unit:"kg", addKg:1.25, note:"Full stretch at the bottom, squeeze at the top."},
+        {id:"a_row",          name:"Seated Cable Row",           sets:3, reps:8, weight:23,  unit:"kg", addKg:2.5,  note:"Chest up, drive elbows back, squeeze shoulder blades."},
+        {id:"a_latpull",      name:"Lat Pulldown",               sets:3, reps:8, weight:36,  unit:"kg", addKg:2.5,  note:"Wide grip, stretch at top, pull to upper chest."},
       ]},
     ]
   },
   B:{
-    label:"Full Body B", color:"B",
-    tip:"Row and press variations today. Squeeze your lats on every pull — that's where the width comes from.",
+    label:"Workout B", color:"B",
+    tip:"Deadlift and squats are your heaviest lifts today — brace properly and rest between them. Assisted pull-ups progress by reducing the assist weight.",
     sections:[
-      {group:"Chest · Triceps", exercises:[
-        {id:"b_incpr",   name:"Incline DB Press",      sets:3, reps:10, weight:22,    unit:"kg each",   addKg:1.25, note:"Upper chest. 30–45° incline."},
-        {id:"b_ohtri",   name:"Overhead Tricep Ext",   sets:3, reps:12, weight:14,    unit:"kg",        addKg:1.25, note:"Single DB overhead, elbows close."},
-      ]},
-      {group:"Back · Biceps", exercises:[
-        {id:"b_latpull", name:"Lat Pulldown",          sets:3, reps:12, weight:50,    unit:"kg",        addKg:2.5,  note:"Wide grip. Stretch at top, pull to upper chest."},
-        {id:"b_dbrow",   name:"DB Row",                sets:3, reps:10, weight:20,    unit:"kg",        addKg:2.5,  note:"Each arm. Drive elbow to ceiling."},
-      ]},
-      {group:"Shoulders", exercises:[
-        {id:"b_shrug",   name:"Shoulder Shrugs",       sets:3, reps:15, weight:17.5,  unit:"kg",        addKg:1.25, note:"Hold 1 second at top."},
-        {id:"b_latr",    name:"Lateral Raises",        sets:3, reps:15, weight:6,     unit:"kg each",   addKg:1.25, note:"Light and strict — no swinging."},
-      ]},
-      {group:"Legs", exercises:[
-        {id:"b_rdl",     name:"Romanian Deadlift",     sets:3, reps:10, weight:35,    unit:"kg",        addKg:2.5,  note:"Hamstring focus. Soft knee, feel the stretch."},
-        {id:"b_legext",  name:"Leg Extension",         sets:3, reps:14, weight:35,    unit:"kg",        addKg:2.5,  note:"Hard squeeze at top."},
-      ]},
-      {group:"Arms", exercises:[
-        {id:"b_hamcrl",  name:"Hammer Curl",           sets:3, reps:12, weight:12,    unit:"kg",        addKg:1.25, note:"Palms facing in — hits brachialis for arm thickness."},
-        {id:"b_cross",   name:"Cable Crossover",       sets:3, reps:14, weight:12,    unit:"kg",        addKg:1.25, note:"Full squeeze in the centre."},
-      ]},
-    ]
-  },
-  C:{
-    label:"Full Body C", color:"C",
-    tip:"Strength day — heavier loads, fewer reps, 90–120s rest. Lower volume, higher intensity.",
-    sections:[
-      {group:"Chest · Triceps", exercises:[
-        {id:"c_bench",   name:"Bench Press (Heavy)",   sets:4, reps:7,  weight:32,    unit:"kg",        addKg:2.5,  note:"4×7 strength protocol. Rest 2 full minutes."},
-        {id:"c_tridn",   name:"Tricep Pulldown",       sets:3, reps:10, weight:15,    unit:"kg",        addKg:1.25, note:"Heavier than usual today."},
-      ]},
-      {group:"Back · Biceps", exercises:[
-        {id:"c_dead",    name:"Dead Lift (Heavy)",     sets:4, reps:6,  weight:45,    unit:"kg",        addKg:2.5,  note:"4 heavy sets. Brace, hinge, drive."},
-        {id:"c_pullup",  name:"Pull Up (Assisted)",    sets:4, reps:8,  weight:25,    unit:"kg assist", addKg:-2.5, note:"4 sets strength focus.", assisted:true},
-      ]},
-      {group:"Shoulders", exercises:[
-        {id:"c_shphv",   name:"Shoulder Press (Heavy)",sets:4, reps:7,  weight:20,    unit:"kg",        addKg:1.25, note:"Heavy compound shoulder work."},
-        {id:"c_facepull",name:"Face Pulls",            sets:3, reps:15, weight:12,    unit:"kg",        addKg:1.25, note:"Rotator cuff health — don't skip."},
-      ]},
-      {group:"Legs", exercises:[
-        {id:"c_lunge",   name:"Walking Lunges",        sets:3, reps:12, weight:10,    unit:"kg each",   addKg:1.25, note:"DB each hand. 12 steps per leg."},
-        {id:"c_legpr",   name:"Leg Press (Heavy)",     sets:4, reps:8,  weight:55,    unit:"kg",        addKg:2.5,  note:"Heavier today. Work in calf raises."},
-      ]},
-      {group:"Arms", exercises:[
-        {id:"c_bichv",   name:"Bicep Curl (Heavy)",    sets:3, reps:8,  weight:14,    unit:"kg",        addKg:1.25, note:"Go heavier, fewer reps."},
-        {id:"c_wrist",   name:"Wrist Rolls",           sets:3, reps:10, weight:null,  unit:"",          addKg:0,    note:"Both sides — forearm endurance."},
+      {group:"Exercises", exercises:[
+        {id:"b_deadlift", name:"Dead Lifts",              sets:3, reps:8, weight:40,   unit:"kg",        addKg:2.5,  note:"Hinge at hips, brace hard. Biggest compound lift."},
+        {id:"b_benchflat",name:"Bench Press Flat",        sets:3, reps:8, weight:20,   unit:"kg",        addKg:2.5,  note:"Controlled down, drive up explosively."},
+        {id:"b_tricext",  name:"Tricep Extensions Regular",sets:3, reps:8, weight:9.1,  unit:"kg",        addKg:1.25, note:"Elbows pinned, full extension at bottom."},
+        {id:"b_pullup",   name:"Supported Pull Ups",      sets:3, reps:8, weight:30,   unit:"kg assist", addKg:-2.5, note:"Reduce assist weight as you get stronger.", assisted:true},
+        {id:"b_preacher", name:"Preacher Curls",          sets:3, reps:8, weight:15,   unit:"kg",        addKg:1.25, note:"Full stretch at bottom, controlled through the top."},
+        {id:"b_hammer",   name:"Hammer Curl",             sets:3, reps:8, weight:32,   unit:"kg",        addKg:1.25, note:"Palms facing in — hits brachialis for arm thickness."},
+        {id:"b_squat",    name:"Squats (Machine)",        sets:3, reps:8, weight:60,   unit:"kg",        addKg:2.5,  note:"Full depth, drive through heels."},
+        {id:"b_shpress",  name:"Shoulder Press (Machine)",sets:3, reps:8, weight:35,   unit:"kg",        addKg:1.25, note:"Controlled press, avoid locking out hard."},
+        {id:"b_shrug",    name:"Shoulder Shrugs",         sets:3, reps:8, weight:25,   unit:"kg",        addKg:1.25, note:"Hold 1 second at top."},
+        {id:"b_row",      name:"Seated Cable Row",        sets:3, reps:8, weight:23,   unit:"kg",        addKg:2.5,  note:"Chest up, drive elbows back, squeeze shoulder blades."},
       ]},
     ]
   }
 };
-const CYCLE=['A','B','C'];
+const CYCLE=['A','B'];
 
 // ═══════════════════════════════════════════════════════
 // CALISTHENICS DATA (declared early — used in exportExcel)
@@ -1112,7 +1071,7 @@ function isAddedExercise(exId){
   return (S.addedExercises||[]).some(a=>a.id===exId);
 }
 
-function wkKey(){ return CYCLE[S.workoutIdx%3]; }
+function wkKey(){ return CYCLE[S.workoutIdx%CYCLE.length]; }
 function allEx(k){
   const out=[];
   wk(k).sections.forEach(s=>s.exercises.forEach(e=>out.push(e)));
@@ -1227,7 +1186,7 @@ function renderToday(){
   let html=`
     <div class="done-banner ${allFinishable()?'show':''}" id="doneBanner">
       <h2>Ready to finish 💪</h2>
-      <p>${done===total?'All sets complete!':'Partial sets saved — tap Finish to log what you did.'} Next up: Workout ${CYCLE[(S.workoutIdx+1)%3]}</p>
+      <p>${done===total?'All sets complete!':'Partial sets saved — tap Finish to log what you did.'} Next up: Workout ${CYCLE[(S.workoutIdx+1)%CYCLE.length]}</p>
     </div>
     <div class="wk-header">
       <div class="wk-label label-${key}">${workout.label}</div>
@@ -2291,10 +2250,15 @@ function doRestore(input){
 }
 
 function confirmReset(){
-  if(!confirm('This will delete ALL your workout history, exercise logs, and body weight data.\n\nAre you absolutely sure? Make sure you have a backup first.')) return;
+  if(!confirm('This will delete ALL your workout history, exercise logs, body weight data, and any exercise edits or additions you\'ve made.\n\nAre you absolutely sure? Make sure you have a backup first.')) return;
   if(!confirm('Last chance — reset everything?')) return;
-  S={sessionCount:0,workoutIdx:0,sessions:[],exLog:{},bodyWeights:{},currentSets:{},openExId:null};
-  S.bodyWeights=[];
+  S={
+    sessionCount:0, workoutIdx:0,
+    sessions:[], exLog:{}, bodyWeights:[],
+    currentSets:{}, openExId:null,
+    unitPrefs:{}, exerciseEdits:{}, addedExercises:[],
+  };
+  editingExId=null; addingSlot=null;
   initSets(); persist();
   showToast('Data reset ✓');
   renderToday();
