@@ -1184,6 +1184,9 @@ function renderToday(){
   document.getElementById('headerBadge').textContent=`Session ${S.sessionCount+1} · ${key}`;
 
   let html=`
+    <div class="wk-switch" style="display:flex;gap:8px;margin-bottom:12px">
+      ${CYCLE.map(k=>`<button onclick="selectWorkout('${k}')" style="flex:1;padding:14px 0;font-size:16px;font-weight:600;font-family:inherit;border-radius:12px;cursor:pointer;border:1px solid ${k===key?'var(--accent)':'#3a3a3a'};background:${k===key?'var(--accent)':'#242424'};color:${k===key?'#1a1a1a':'#f0ece4'}">Workout ${k}</button>`).join('')}
+    </div>
     <div class="done-banner ${allFinishable()?'show':''}" id="doneBanner">
       <h2>Ready to finish 💪</h2>
       <p>${done===total?'All sets complete!':'Partial sets saved — tap Finish to log what you did.'} Next up: Workout ${CYCLE[(S.workoutIdx+1)%CYCLE.length]}</p>
@@ -1390,6 +1393,14 @@ function updateProg(){
   const meta=document.querySelectorAll('.prog-meta span');
   if(fill) fill.style.width=Math.round(started/total*100)+'%';
   if(meta[1]) meta[1].textContent=`${started} of ${total} exercises started`;
+}
+function selectWorkout(k){
+  if(k===wkKey()) return;
+  if(startedCount()>0 && !confirm('Switching workouts will discard the sets you have entered in this session. Continue?')) return;
+  while(wkKey()!==k) S.workoutIdx++;
+  S.openExId=null;
+  initSets(); persist();
+  renderToday();
 }
 function finishSession(){
   const key=wkKey();
